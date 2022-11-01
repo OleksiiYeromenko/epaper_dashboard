@@ -73,7 +73,7 @@ def main():
         # Get the CPU temperature
         cpu_temp = round(cpu.temperature,1)
         # Get the GPU temperature
-        gpu_temp = run_cmd("vcgencmd measure_temp | grep -o -E '[0-9]+.[0-9]'").rstrip()
+        gpu_temp = run_cmd("vcgencmd measure_temp | grep -o -E '[0-9]+.[0-9]'")
         # Get CPU usage
         cpu_usage_pct = psutil.cpu_percent(interval=1)
         cpu_frequency = int(psutil.cpu_freq().current)
@@ -88,6 +88,7 @@ def main():
         disk_total = round(psutil.disk_usage('/').total / 2**30, 2)# GiB.
         disk_used = round(psutil.disk_usage('/').used / 2**30, 2)
         disk_percent_used = round(psutil.disk_usage('/').percent,2)
+        uptime = run_cmd('uptime -p')
          
     #     logging.info(f"host: {device_name}")
     #     logging.info(f"{timestamp}")
@@ -102,17 +103,18 @@ def main():
         Himage = Image.new('1', (epd2in7.EPD_HEIGHT, epd2in7.EPD_WIDTH), 255)  # 255: clear the frame
         draw = ImageDraw.Draw(Himage) # Create draw object and pass in the image layer we want to work with
         # prepare image to draw
-        starting_x = 1
+        starting_x = 2
         starting_y = 35
         shift_y = 21
         draw.text((starting_x, 1), f"{device_ip}", font = get_font(18), fill = 0)   # draw the text to the display. First argument is starting location of the text in pixels 
-        draw.text((starting_x+115, 1), f"{timestamp}", font = get_font(19), fill = 0)   # draw the text to the display. First argument is starting location of the text in pixels 
-        draw.text((starting_x, starting_y), f"CPU Temperature: {cpu_temp}°C", font = get_font(17), fill = 0)   
-        draw.text((starting_x, starting_y+shift_y), f"GPU Temperature: {gpu_temp}°C", font = get_font(17), fill = 0)   
-        draw.text((starting_x, starting_y+2*shift_y), f'System CPU load: {cpu_usage_pct}%', font = get_font(17), fill = 0)   
-        draw.text((starting_x, starting_y+3*shift_y), f'RAM usage: {ram_usage}MB/{round(ram_total/1024, 2)}GB, {ram_usage_pct}%', font = get_font(17), fill = 0)   
-        draw.text((starting_x, starting_y+4*shift_y), f'Swap usage: {swap_used}/{swap_total}MB, {round(100*swap_used/swap_total,2)}%', font = get_font(17), fill = 0)   
-        draw.text((starting_x, starting_y+5*shift_y), f"Disk usage: {disk_used}/{disk_total}GB, {disk_percent_used}%", font = get_font(17), fill = 0)   
+        draw.text((starting_x+118, 1), f"{timestamp}", font = get_font(18), fill = 0)   # draw the text to the display. First argument is starting location of the text in pixels 
+        draw.text((starting_x, starting_y), f"Temp.: CPU:{cpu_temp}°C,", font = get_font(16), fill = 0)   
+        draw.text((starting_x+145, starting_y), f"GPU:{gpu_temp}°C", font = get_font(16), fill = 0)   
+        draw.text((starting_x, starting_y+shift_y), f'System CPU load: {cpu_usage_pct}%', font = get_font(16), fill = 0)   
+        draw.text((starting_x, starting_y+2*shift_y), f'RAM usage: {ram_usage}MB/{round(ram_total/1024, 2)}GB, {ram_usage_pct}%', font = get_font(16), fill = 0)   
+        draw.text((starting_x, starting_y+3*shift_y), f'Swap usage: {swap_used}/{swap_total}MB, {round(100*swap_used/swap_total,2)}%', font = get_font(16), fill = 0)   
+        draw.text((starting_x, starting_y+4*shift_y), f"Disk usage: {disk_used}/{disk_total}GB, {disk_percent_used}%", font = get_font(16), fill = 0)
+        draw.text((starting_x, starting_y+5*shift_y), f"Uptime: {uptime}.", font = get_font(16), fill = 0)   
         # Print on display
         logging.info("\tWriting to screen... ")
         tic = time.perf_counter()
