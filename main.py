@@ -106,7 +106,7 @@ def main():
         starting_y = 35
         shift_y = 21
         draw.text((starting_x, 1), f"{device_ip}", font = get_font(18), fill = 0)   # draw the text to the display. First argument is starting location of the text in pixels 
-        draw.text((starting_x+120, 1), f"{timestamp}", font = get_font(19), fill = 0)   # draw the text to the display. First argument is starting location of the text in pixels 
+        draw.text((starting_x+115, 1), f"{timestamp}", font = get_font(19), fill = 0)   # draw the text to the display. First argument is starting location of the text in pixels 
         draw.text((starting_x, starting_y), f"CPU Temperature: {cpu_temp}°C", font = get_font(17), fill = 0)   
         draw.text((starting_x, starting_y+shift_y), f"GPU Temperature: {gpu_temp}°C", font = get_font(17), fill = 0)   
         draw.text((starting_x, starting_y+2*shift_y), f'System CPU load: {cpu_usage_pct}%', font = get_font(17), fill = 0)   
